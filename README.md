@@ -1,2 +1,2 @@
 # magnit
-a simply cheat client for minecraft - Magnit client.
+a simply cheat client for minecraft - Magnit Client.
