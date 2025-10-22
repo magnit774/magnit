@@ -6,11 +6,12 @@
     <title>Magnit Client | Undetectable Power</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <style>
-        /* Основа: Глубокий черный фон */
+        /* Общие стили и основа */
         body {
-            font-family: 'Orbitron', sans-serif; /* Футуристичный шрифт */
+            font-family: 'Orbitron', sans-serif;
             background-color: #050505;
             color: #eeeeee;
             margin: 0;
@@ -20,9 +21,8 @@
             align-items: center;
             text-align: center;
             min-height: 100vh;
-            /* Добавляем паттерн из точек для атмосферы */
-            background-image: radial-gradient(#1a1a1a 1px, transparent 1px);
-            background-size: 40px 40px;
+            overflow-x: hidden; /* Предотвращаем горизонтальный скролл */
+            position: relative; /* Для позиционирования анимированных элементов */
         }
 
         /* Неоновый цвет акцента (Фиолетовый/Голубой) */
@@ -30,204 +30,293 @@
             --neon-color: #8A2BE2; /* Ярко-фиолетовый */
             --neon-shadow: 0 0 10px #8A2BE2, 0 0 20px #8A2BE2, 0 0 40px rgba(138, 43, 226, 0.7);
             --neon-color-alt: #00ffcc; /* Дополнительный неоновый цвет (для кнопки Login) */
-            --neon-shadow-alt: 0 0 10px #00ffcc, 0 0 20px #00ffcc, 0 0 40px rgba(0, 255, 204, 0.7);
+            --header-bg: #141414; /* Фон шапки */
+            --account-btn-color: linear-gradient(90deg, #3498db, #5b50f7); /* Градиент для кнопки ЛК */
         }
+        
+        /* ---------------------------------------------------- */
+        /* АНИМИРОВАННЫЙ НЕОНОВЫЙ ФОН (CSS ONLY) */
+        /* ---------------------------------------------------- */
 
-        /* Шапка */
-        header {
-            padding: 60px 20px;
+        .animated-background {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            background: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон для контраста */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            height: 100%;
+            background-image: radial-gradient(circle at center, #1a0033 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -2;
+            overflow: hidden;
         }
 
-        /* Заголовок */
-        .title {
-            font-size: 4.5em;
-            text-transform: uppercase;
-            letter-spacing: 8px;
-            color: #ffffff;
-            text-shadow: var(--neon-shadow); /* Неоновое свечение */
-            margin-bottom: 5px;
+        .squares li {
+            position: absolute;
+            display: block;
+            list-style: none;
+            width: 20px;
+            height: 20px;
+            background: rgba(138, 43, 226, 0.2); /* Полупрозрачный неоновый */
+            border: 1px solid var(--neon-color);
+            box-shadow: 0 0 5px var(--neon-color);
+            animation: animate 25s linear infinite;
+            bottom: -200px;
+            z-index: -1;
+        }
+
+        .squares li:nth-child(1) {
+            left: 25%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 0s;
+        }
+
+        .squares li:nth-child(2) {
+            left: 10%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 2s;
+            animation-duration: 12s;
+        }
+
+        .squares li:nth-child(3) {
+            left: 70%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 4s;
+        }
+
+        .squares li:nth-child(4) {
+            left: 40%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 0s;
+            animation-duration: 18s;
+        }
+
+        .squares li:nth-child(5) {
+            left: 65%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 0s;
+        }
+
+        .squares li:nth-child(6) {
+            left: 75%;
+            width: 110px;
+            height: 110px;
+            animation-delay: 3s;
+        }
+
+        .squares li:nth-child(7) {
+            left: 35%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 7s;
+        }
+
+        @keyframes animate {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+                border-radius: 0;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+                border-radius: 50%; /* Превращаем в круг в конце */
+            }
         }
         
-        /* Подзаголовок */
-        .tagline {
-            font-size: 1.4em;
-            color: #cccccc;
-            margin-bottom: 40px;
-            letter-spacing: 2px;
-        }
+        /* ---------------------------------------------------- */
+        /* ШАПКА И КОНТЕНТ (Z-INDEX 10) */
+        /* ---------------------------------------------------- */
 
-        /* Контейнер для логотипа */
-        .logo-container {
-            margin-bottom: 30px;
-            border: 3px solid var(--neon-color);
-            box-shadow: var(--neon-shadow);
-            padding: 15px;
-            background-color: #000000;
-            display: inline-block;
-            transition: transform 0.3s ease;
-        }
-        
-        .logo-container:hover {
-            transform: scale(1.05);
-        }
-
-        /* Место для логотипа */
-        .logo {
-            width: 180px; /* Размер логотипа */
-            height: 180px;
-        }
-
-        /* Контейнер для кнопок */
-        .button-group {
-            display: flex;
-            gap: 20px; /* Расстояние между кнопками */
-            justify-content: center;
-        }
-        
-        /* Общие стили для кнопок */
-        .neon-button {
-            display: inline-block;
-            padding: 18px 40px;
-            text-decoration: none;
-            font-size: 1.6em;
-            font-weight: bold;
-            border-radius: 2px;
-            transition: all 0.4s ease;
-            text-transform: uppercase;
-            border: none;
-            cursor: pointer;
-            text-align: center;
-        }
-
-        /* Стиль для кнопки DOWNLOAD */
-        .download-button {
-            background: var(--neon-color); /* Фиолетовый/Основной */
-            color: #000000;
-            box-shadow: var(--neon-shadow);
-        }
-
-        .download-button:hover {
-            background: #BA55D3;
-            box-shadow: 0 0 15px #BA55D3, 0 0 30px #BA55D3;
-        }
-
-        /* Стиль для кнопки LOGIN */
-        .login-button {
-            background: var(--neon-color-alt); /* Зеленый/Альтернативный */
-            color: #000000;
-            box-shadow: var(--neon-shadow-alt);
-        }
-
-        .login-button:hover {
-            background: #33ffff;
-            box-shadow: 0 0 15px #33ffff, 0 0 30px #33ffff;
-        }
-
-
-        /* Секция с функциями (без изменений) */
-        .features {
-            max-width: 1000px;
-            margin-top: 80px;
+        .header-nav {
+            width: 100%;
+            background-color: var(--header-bg);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
             padding: 0 20px;
             display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            position: relative; /* Устанавливаем выше фона */
+            z-index: 10;
         }
 
-        .features h2 {
-            width: 100%;
-            font-size: 2.5em;
+        .logo-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            letter-spacing: 2px;
+            padding: 15px 0;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-links li {
+            margin-right: 25px;
+        }
+
+        .nav-links a {
+            color: #cccccc;
+            text-decoration: none;
+            font-size: 0.9em;
+            padding: 15px 5px;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
             color: var(--neon-color);
-            text-shadow: 0 0 5px var(--neon-color);
-            margin-bottom: 40px;
         }
 
-        .feature-item {
-            width: 250px;
-            margin: 20px;
-            padding: 25px;
-            border-top: 3px solid var(--neon-color);
-            background-color: #111111;
+        .nav-links i {
+            margin-right: 8px;
+            color: var(--neon-color);
+        }
+
+        .account-button {
+            background: var(--account-btn-color);
+            color: #ffffff;
+            font-weight: bold;
+            padding: 10px 20px;
             border-radius: 5px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
-            transition: transform 0.3s ease;
+            text-decoration: none;
+            font-size: 1em;
+            transition: opacity 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            white-space: nowrap; 
         }
 
-        .feature-item:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.9), var(--neon-shadow);
-        }
-
-        .feature-item h3 {
-            color: var(--neon-color);
-            font-size: 1.5em;
-            margin-bottom: 10px;
-            text-shadow: 0 0 5px var(--neon-color);
-        }
-
-        .feature-item p {
-            color: #bbbbbb;
+        .account-button:hover {
+            opacity: 0.9;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.7);
         }
         
-        /* Нижний колонтитул */
-        footer {
-            margin-top: auto; 
-            padding: 20px;
-            width: 100%;
-            border-top: 1px solid #222;
-            color: #444;
-            font-size: 0.8em;
+        .account-button i {
+            margin-right: 10px;
         }
+
+        .main-content {
+            padding: 60px 20px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 5; /* Контент должен быть виден поверх фона */
+        }
+        
+        /* Стили для логотипа, кнопок и фич - оставлены как были */
+        .title { font-size: 4.5em; text-transform: uppercase; letter-spacing: 8px; color: #ffffff; text-shadow: var(--neon-shadow); margin-bottom: 5px; }
+        .tagline { font-size: 1.4em; color: #cccccc; margin-bottom: 40px; letter-spacing: 2px; }
+        .logo-container { margin-bottom: 30px; border: 3px solid var(--neon-color); box-shadow: var(--neon-shadow); padding: 15px; background-color: #000000; display: inline-block; transition: transform 0.3s ease; }
+        .logo { width: 180px; height: 180px; }
+        .button-group { display: flex; gap: 20px; justify-content: center; margin-bottom: 40px; }
+        .neon-button { display: inline-block; padding: 18px 40px; text-decoration: none; font-size: 1.6em; font-weight: bold; border-radius: 2px; transition: all 0.4s ease; text-transform: uppercase; border: none; cursor: pointer; text-align: center; }
+        .download-button { background: var(--neon-color); color: #000000; box-shadow: var(--neon-shadow); }
+        .download-button:hover { background: #BA55D3; box-shadow: 0 0 15px #BA55D3, 0 0 30px #BA55D3; }
+        .login-button { background: var(--neon-color-alt); color: #000000; box-shadow: 0 0 10px var(--neon-color-alt), 0 0 20px rgba(0, 255, 204, 0.7); }
+        .login-button:hover { background: #33ffff; box-shadow: 0 0 15px #33ffff, 0 0 30px #33ffff; }
+        .features { max-width: 1000px; margin-top: 40px; padding: 0 20px; display: flex; justify-content: space-around; flex-wrap: wrap; }
+        .features h2 { width: 100%; font-size: 2.5em; color: var(--neon-color); text-shadow: 0 0 5px var(--neon-color); margin-bottom: 40px; }
+        .feature-item { width: 250px; margin: 20px; padding: 25px; border-top: 3px solid var(--neon-color); background-color: #111111; border-radius: 5px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7); transition: transform 0.3s ease; }
+        .feature-item:hover { transform: translateY(-10px); box-shadow: 0 15px 25px rgba(0, 0, 0, 0.9), var(--neon-shadow); }
+        .feature-item h3 { color: var(--neon-color); font-size: 1.5em; margin-bottom: 10px; text-shadow: 0 0 5px var(--neon-color); }
+        .feature-item p { color: #bbbbbb; }
+        footer { margin-top: auto; padding: 20px; width: 100%; border-top: 1px solid #222; color: #444; font-size: 0.8em; position: relative; z-index: 10;}
 
     </style>
 </head>
 <body>
 
-    <header>
+    <div class="animated-background">
+        <ul class="squares">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+
+    <nav class="header-nav">
+        <a href="index.html" class="logo-title">MAGNIT</a>
+        
+        <ul class="nav-links">
+            <li>
+                <a href="#support">
+                    <i class="fa-solid fa-headset"></i> Поддержка
+                </a>
+            </li>
+            <li>
+                <a href="#buy">
+                    <i class="fa-solid fa-shopping-cart"></i> Купить
+                </a>
+            </li>
+        </ul>
+        
+        <a href="login.html" class="account-button">
+            <i class="fa-solid fa-user"></i> Личный кабинет
+        </a>
+    </nav>
+    
+    <div class="main-content">
+        
         <div class="logo-container">
-            <img src="magnit.png" alt="Логотип Magnit Client" class="logo">
+            <img src="magnit_logo.png" alt="Логотип Magnit Client" class="logo">
         </div>
         
         <div class="title">MAGNIT CLIENT</div>
         <p class="tagline">// UNDETECTABLE POWER. YOUR GAME CHANGER.</p>
 
         <div class="button-group">
-            <a href="https://magnit774.github.io/magnitctl/login" class="neon-button login-button">
+            <a href="login.html" class="neon-button login-button">
                 LOGIN
             </a>
-
-            <a href="https://magnit774.github.io/magnitctl/download/MagnitClient.zip" class="neon-button download-button">
+            <a href="https://https://magnit774.github.io/magnit/download/MagnitClient.zip" class="neon-button download-button">
                 DOWNLOAD
             </a>
         </div>
-    </header>
+    
+        <section class="features">
+            <h2>CORE FEATURES</h2>
+            
+            <div class="feature-item">
+                <h3>LEGIT ANTICHEAT BYPASS</h3>
+                <p>Новейшие алгоритмы обхода, разработанные для максимальной незаметности на любом сервере.</p>
+            </div>
+    
+            <div class="feature-item">
+                <h3>CRYSTAL GUI</h3>
+                <p>Современный, полностью настраиваемый интерфейс с неоновыми эффектами.</p>
+            </div>
+            
+            <div class="feature-item">
+                <h3>PERFORMANCE</h3>
+                <p>Оптимизированный код, который не снижает ваш FPS. Чистая производительность.</p>
+            </div>
+            
+            <div class="feature-item">
+                <h3>MODULE VARIETY</h3>
+                <p>Более 100 уникальных модулей с гибкой настройкой под ваш стиль игры.</p>
+            </div>
+        </section>
+    </div>
 
-    <section class="features">
-        <h2>CORE FEATURES</h2>
-        
-        <div class="feature-item">
-            <h3>LEGIT ANTICHEAT BYPASS</h3>
-            <p>Новейшие алгоритмы обхода, разработанные для максимальной незаметности на любом сервере.</p>
-        </div>
-
-        <div class="feature-item">
-            <h3>CRYSTAL GUI</h3>
-            <p>Современный, полностью настраиваемый интерфейс с неоновыми эффектами.</p>
-        </div>
-        
-        <div class="feature-item">
-            <h3>PERFORMANCE</h3>
-            <p>Оптимизированный код, который не снижает ваш FPS. Чистая производительность.</p>
-        </div>
-        
-        <div class="feature-item">
-            <h3>MODULE VARIETY</h3>
-            <p>Более 100 уникальных модулей с гибкой настройкой под ваш стиль игры.</p>
-        </div>
-    </section>
 
     <footer>
         <p>&copy; 2025 MAGNIT SYSTEMS. All Rights Reserved. | ACCESS GRANTED.</p>
